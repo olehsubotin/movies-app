@@ -39,7 +39,7 @@ function App() {
 
       const data = await response.json();
 
-      setMovieList(data.results);
+      setMovieList(data.results || []);
     } catch (error) {
       console.error('Error fetching movies:', error);
       setErrorMessage('Failed to fetch movies. Please try again later.');
