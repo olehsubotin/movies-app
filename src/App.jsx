@@ -19,18 +19,28 @@ const API_OPTIONS = {
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [errorMessage, setErrorMessage] = useState(null);
   const [movieList, setMovieList] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [trendingMovies, setTrendingMovies] = useState([]);
+  const [trendingMovieErrorMessage, setTrendingMovieErrorMessage] =
+    useState(null);
+  const [isTrendingMoviesLoading, setTrendingMoviesLoading] = useState(true);
   const [debouncedSearchTerm, setDebouncedSearchedTerm] = useState(searchTerm);
 
   const fetchTrendingMovies = async () => {
+    setTrendingMovieErrorMessage(null);
+    setTrendingMoviesLoading(true);
     try {
       const movies = await getTrendingMovies();
       setTrendingMovies(movies);
     } catch (error) {
       console.log(error);
+      setTrendingMovieErrorMessage(
+        'Failed to fetch trending movies. Please try again later.'
+      );
+    } finally {
+      setTrendingMoviesLoading(false);
     }
   };
 
@@ -86,19 +96,31 @@ function App() {
             <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           </header>
 
-          {trendingMovies.length > 0 && (
-            <section className='trending'>
-              <h2>Trending Movies</h2>
+          <section className='trending'>
+            <h2>Trending Movies</h2>
+            {isTrendingMoviesLoading ? (
+              <Spinner />
+            ) : trendingMovieErrorMessage ? (
+              <p className='text-red-500'>{trendingMovieErrorMessage}</p>
+            ) : trendingMovies.length === 0 ? (
+              <p>No trending movies found.</p>
+            ) : (
               <ul>
                 {trendingMovies.map((movie, index) => (
                   <li key={movie.$id}>
                     <p>{index + 1}</p>
-                    <img src={movie.poster_url} alt={movie.title} />
+                    <img
+                      src={movie.poster_url}
+                      alt={movie.title}
+                      onError={(e) => {
+                        e.target.src = 'no-movie.png';
+                      }}
+                    />
                   </li>
                 ))}
               </ul>
-            </section>
-          )}
+            )}
+          </section>
 
           <section className='all-movies'>
             <h2 className='mt-[40px]'>All movies</h2>
