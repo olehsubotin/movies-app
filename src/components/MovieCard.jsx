@@ -10,6 +10,7 @@ const MovieCard = ({
         }}
         alt={title}
         className='movie-card__image'
+        height={288}
       />
       <div className='mt-4'>
         <h3>{title}</h3>
@@ -31,17 +32,3 @@ const MovieCard = ({
 };
 
 export default MovieCard;
-
-/* DATA
-"adult": false,
-"backdrop_path": "/j0NUh5irX7q2jIRtbLo8TZyRn6y.jpg",
-"genre_ids": [
-    27,
-    9648
-],
-"original_title": "Final Destination Bloodlines",
-"overview": "Plagued by a violent recurring nightmare, college student Stefanie heads home to track down the one person who might be able to break the cycle and save her family from the grisly demise that inevitably awaits them all.",
-"popularity": 386.4101,
-"video": false,
-"vote_count": 192
-*/
